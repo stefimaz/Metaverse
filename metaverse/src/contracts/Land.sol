@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract Land is ERC721 {
     uint256 public cost = 1 ether;
-    uint256 public maxsuppy = 5;
+    uint256 public maxSupply = 5;
     uint256 public totalSupply = 0;
 
     struct Building {
@@ -40,5 +40,54 @@ contract Land is ERC721 {
         buildings.push(
             Building("Shopping Plaza 2", address(0x0), -10, 0, 0, 5, 25, 5)
         );
+    }
+
+    function mint(uint256 _id) public payable {
+        uint256 supply = totalSupply;
+        require(supply <= maxSupply);
+        require(buildings[_id - 1].owner == address(0x0));
+        require(msg.value >= 1 ether);
+
+        buildings[_id - 1].owner = msg.sender;
+        totalSupply = totalSupply + 1;
+        _safeMint(msg.sender, _id);
+    }
+
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public override {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "ERC721: transfer caller is not owner nor approved"
+        );
+        buildings[tokenId - 1].owner = to;
+        _transfer(from, to, tokenId);
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory _data
+    ) public override {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "ERC721: transfer caller is not owner nor approved"
+        );
+
+        // Update Building ownership
+        buildings[tokenId - 1].owner = to;
+
+        _safeTransfer(from, to, tokenId, _data);
+    }
+
+    function getBuildings() public view returns (Building[] memory) {
+        return buildings;
+    }
+
+    function getBuilding(uint256 _id) public view returns (Building memory) {
+        return buildings[_id - 1];
     }
 }
