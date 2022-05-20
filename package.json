@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/contracts": "^4.6.0",
     "@react-three/cannon": "^4.6.1",
     "@react-three/drei": "^8.8.4",
     "@react-three/fiber": "^7.0.26",
@@ -17,7 +17,7 @@
     "react-scripts": "5.0.0",
     "three": "^0.137.5",
     "web-vitals": "^2.1.4",
-    "web3": "^1.7.0"
+    "web3": "^1.7.3"
   },
   "scripts": {
     "start": "react-app-rewired start",
